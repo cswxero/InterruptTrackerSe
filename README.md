@@ -1,4 +1,4 @@
-InterruptTrackerSe
+ImprovedBlizzFrame
 ==================
 
-World of warcraft Addon InterruptTrackerSe(WOD)
+World of warcraft Addon ImprovedBlizzFrame(WOD)
