@@ -1,0 +1,289 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
+	<Script file="InterruptTrackerSe.lua"/>
+
+	<Font name="InterruptTrackerDurText" font="Fonts\FRIZQT__.TTF" virtual="true" outline="NORMAL" >
+		<FontHeight>
+			<AbsValue val="16"/>
+		</FontHeight>
+		<Color r="1.0" g="0.82" b="0"/>
+	</Font>
+
+	<Frame name="InterruptTrackerPanel">
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormalLarge" text="InterruptTracker">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="10" y="-15"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+
+			<CheckButton name="InterruptTrackerOptionsUnlock" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-55"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							InterruptTrackerLockFunc()
+						else
+							InterruptTrackerUnlockFunc()
+						end
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+
+			<CheckButton name="InterruptTrackerOptionsRotate" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-105"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if(self:GetChecked()) then
+							InterruptTrackerSeRotate = true
+						else
+							InterruptTrackerSeRotate = false
+						end
+						
+						InterruptTrackerSetLayout()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+		
+			<Slider name="InterruptTrackerSeScaleSlider" inherits="OptionsSliderTemplate" minValue="0.5" maxValue="3" valueStep="0.05">
+				<Anchors>
+					<Anchor point="CENTER" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-370"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentValue" inherits="GameFontHighlightSmall">
+							<Anchors>
+								<Anchor point="TOP" relativePoint="BOTTOM">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnValueChanged>
+						local scale = math.floor(self:GetValue()*100+0.5)/100
+						InterruptTrackerSeScaleSliderValue:SetText(scale)
+						InterruptTrackerSeScale = scale
+						InterruptTrackerSetScale()
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			
+			<Slider name="InterruptTrackerSeMaxFramesSlider" inherits="OptionsSliderTemplate" minValue="1" maxValue="10" valueStep="1">
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="TOP">
+						<Offset>
+							<AbsDimension x="40" y="-175"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentValue" inherits="GameFontHighlightSmall">
+							<Anchors>
+								<Anchor point="TOP" relativePoint="BOTTOM">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnValueChanged>
+						local maxframes = self:GetValue()
+						InterruptTrackerSeMaxFramesSliderValue:SetText(maxframes)
+						InterruptTrackerSeMaxFrames = maxframes
+						
+						InterruptTrackerUpdateMaxNum()
+						InterruptTrackerSetLayout()
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.name = "InterruptTracker"
+				InterfaceOptions_AddCategory(self);
+
+				self:RegisterEvent("ADDON_LOADED")
+				
+				InterruptTrackerOptionsUnlockText:SetTextColor(1,1,1)
+				InterruptTrackerOptionsUnlockText:SetText("Lock Frame")
+				InterruptTrackerOptionsUnlock.tooltipText = "Unlock to move the frame"
+				InterruptTrackerOptionsUnlock:SetChecked()
+
+				InterruptTrackerOptionsRotateText:SetTextColor(1,1,1)
+				InterruptTrackerOptionsRotateText:SetText("Rotate Frame")
+				InterruptTrackerOptionsRotate.tooltipText = "Rotates InterruptTracker Frame by 90 degrees"
+				
+
+				InterruptTrackerSeScaleSliderText:SetText("Scale")
+				InterruptTrackerSeMaxFramesSliderText:SetText("Maximum Number of Icons")
+				InterruptTrackerSeMaxFramesSlider.tooltipText = "Maximum number of icons that will be shown at the same time outside Arenas"
+			</OnLoad>
+			<OnEvent>
+				arg1 = ...
+				
+				if(arg1 ~= "InterruptTrackerSe") then
+					return
+				end
+
+				InterruptTrackerSeScaleSlider:SetValue(InterruptTrackerSeScale)
+				InterruptTrackerSeScaleSliderValue:SetText(InterruptTrackerSeScale)
+
+				InterruptTrackerSeMaxFramesSlider:SetValue(InterruptTrackerSeMaxFrames)
+				InterruptTrackerSeMaxFramesSliderValue:SetText(InterruptTrackerSeMaxFrames)
+			</OnEvent>
+		</Scripts>
+	</Frame>
+	
+    <Frame name="InterruptTrackerActivationAlert" virtual="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parentSpark" parentKey="spark" file="Interface\SpellActivationOverlay\IconAlert" alpha="0" setAllPoints="true">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                    <TexCoords left="0.00781250" right="0.61718750" top="0.00390625" bottom="0.26953125"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parentInnerGlow" parentKey="innerGlow" file="Interface\SpellActivationOverlay\IconAlert" alpha="0" setAllPoints="true">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                    <TexCoords left="0.00781250" right="0.50781250" top="0.27734375" bottom="0.52734375"/>
+                </Texture>
+                <Texture name="$parentInnerGlowOver" parentKey="innerGlowOver" file="Interface\SpellActivationOverlay\IconAlert" alpha="0">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeTo="$parentInnerGlow" relativePoint="TOPLEFT"/>
+                        <Anchor point="BOTTOMRIGHT" relativeTo="$parentInnerGlow" relativePoint="BOTTOMRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0.00781250" right="0.50781250" top="0.53515625" bottom="0.78515625"/>
+                </Texture>
+                <Texture name="$parentOuterGlow" parentKey="outerGlow" file="Interface\SpellActivationOverlay\IconAlert" alpha="0" setAllPoints="true">
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                    <TexCoords left="0.00781250" right="0.50781250" top="0.27734375" bottom="0.52734375"/>
+                </Texture>
+                <Texture name="$parentOuterGlowOver" parentKey="outerGlowOver" file="Interface\SpellActivationOverlay\IconAlert" alpha="0">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeTo="$parentOuterGlow" relativePoint="TOPLEFT"/>
+                        <Anchor point="BOTTOMRIGHT" relativeTo="$parentOuterGlow" relativePoint="BOTTOMRIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0.00781250" right="0.50781250" top="0.53515625" bottom="0.78515625"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnHide>
+                if ( self.animIn:IsPlaying() ) then
+                    self.animIn:Stop();
+                end
+            </OnHide>
+        </Scripts>
+        <Animations>
+            <AnimationGroup parentKey="animIn">
+                <Scale target="$parentSpark" duration="0.2" scaleX="1.5" scaleY="1.5" order="1"/>
+                <Alpha target="$parentSpark" duration="0.2" change="1" order="1"/>
+                <Scale target="$parentInnerGlow" duration="0.3" scaleX="2" scaleY="2" order="1"/>
+                <Scale target="$parentInnerGlowOver" duration="0.3" scaleX="2" scaleY="2" order="1"/>
+                <Alpha target="$parentInnerGlowOver" duration="0.3" change="-1" order="1"/>
+                <Scale target="$parentOuterGlow" duration="0.3" scaleX="0.5" scaleY="0.5" order="1"/>
+                <Scale target="$parentOuterGlowOver" duration="0.3" scaleX="0.5" scaleY="0.5" order="1"/>
+                <Alpha target="$parentOuterGlowOver" duration="0.3" change="-1" order="1"/>
+                <Scale target="$parentSpark" startDelay="0.2" duration="0.2" scaleX="0.666666" scaleY="0.666666" order="1"/>
+                <Alpha target="$parentSpark" startDelay="0.2" duration="0.2" change="-1" order="1"/>
+                <Alpha target="$parentInnerGlow" startDelay="0.3" duration="0.2" change="-1" order="1"/>
+                <Alpha target="$parentOuterGlow" startDelay="0.3" duration="0.2" change="-1" order="1"/>			
+                <Scripts>
+                    <OnPlay>
+                        local frame = self:GetParent();
+                        local frameWidth, frameHeight = frame:GetSize();
+                        frame.spark:SetSize(frameWidth, frameHeight);
+                        frame.spark:SetAlpha(0.3)
+                        frame.innerGlow:SetSize(frameWidth / 2, frameHeight / 2);
+                        frame.innerGlow:SetAlpha(1.0);
+                        frame.innerGlowOver:SetAlpha(1.0);
+                        frame.outerGlow:SetSize(frameWidth * 2, frameHeight * 2);
+                        frame.outerGlow:SetAlpha(1.0);
+                        frame.outerGlowOver:SetAlpha(1.0);
+                        frame:Show();
+                    </OnPlay>
+                    <OnFinished>
+						self:GetParent():Hide()
+                    </OnFinished>
+					<OnStop>
+						self:GetParent():Hide()					
+					</OnStop>
+                </Scripts>
+            </AnimationGroup>
+        </Animations>
+    </Frame>
+
+	
+	<Button name="InterruptTrackerHeader" frameStrata="LOW" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+		<Anchors>
+			<Anchor point="TOP" relativeTo="UIParent" relativePoint="CENTER">
+				<Offset>
+					<AbsDimension x="0" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Size>
+			<AbsDimension x="206" y="44"/>
+		</Size>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString inherits="GameFontNormal" text="InterruptTracker">
+					<Anchors>
+						<Anchor point="BOTTOM" relativePoint="TOP">
+							<Offset>
+								<AbsDimension x="0" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background"/>
+		<Scripts>
+			<OnDragStart>self:StartMoving()</OnDragStart>
+			<OnDragStop>self:StopMovingOrSizing()</OnDragStop>
+			<OnLoad function="InterruptTrackerOnLoad"/>
+			<OnEvent function="InterruptTrackerOnEvent"/>
+		</Scripts>
+	</Button>
+	
+</Ui>
