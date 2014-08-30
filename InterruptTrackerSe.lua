@@ -1,19 +1,19 @@
-local spellList = {
+ï»¿local spellList = {
 	[47528] = 15,	-- DeathKnight Mind Freeze
-	[80965] = 15,  	-- Skull Bash (Cat)
+	[106839] = 15,  -- Skull Bash (Cat)
 	[2139] = 20,	-- Mage Counterspell
 	[96231] = 15,  	-- Paladin Rebuke
 	[1766] = 15,	-- Rogue Kick
 	[57994] = 12,	-- Shaman Wind Shear
 	[19647] = 24,	-- Warlock Spell Lock
 	[115781] = 24,	-- Warlock Optic blast
+	[119911] = 24, 	-- Warlock Optic blast
 	[132409] = 24, 	-- Warlock Sacrifice Spell Lock
 	[6552] = 15,	-- Warrior Pummel
-	[102060] = 40,	-- Àü»ç ½Ã¹ß ÈÑ¹æ
-	[116705] = 15,	-- ¼Õ³¯Âî¸£±â(¼öµµ»ç)
-	[147362] = 24,  -- ¹İ°İÀÇ »ç°İ
-	[34490] = 24, 	-- Ä§¹¬ÀÇ »ç°İ
-	[119911] = 24, 	-- Warlock Optic blast
+	--[102060] = 40,	-- ì „ì‚¬ ì‹œë°œ í›¼ë°©
+	[116705] = 15,	-- ì†ë‚ ì°Œë¥´ê¸°(ìˆ˜ë„ì‚¬)
+	[147362] = 24,  -- ë°˜ê²©ì˜ ì‚¬ê²©
+	[34490] = 24, 	-- ì¹¨ë¬µì˜ ì‚¬ê²©	
 }
 
 local fadedcolor              = {0.45,0.45,0.45,0.70};
@@ -363,17 +363,17 @@ function InterruptTrackerOnEvent(self, event, ...)
 			
 			if spellList[spellId] then
 				--print("0:"..sourceGUID.."-"..spellId)
-				--ÀÏ´Ü Ã£¾Æº¸ÀÚ			
+				--ì¼ë‹¨ ì°¾ì•„ë³´ì			
 				for i=1, numframes do
 					if frames[i].guid==sourceGUID and frames[i].spellId == spellId then
 						InterruptTrackerShowFrame(i, spellId)
 						InterruptTrackerStartCounter(i)
 						
 						--print("1:"..sourceGUID.."-"..spellId)
-						
-						if( spellId == 6552 ) then
+
+						--[[if( spellId == 6552 ) then
 							--print("6552!!")
-							--ÀÚ·çÄ¡±âÀÏ °æ¿ì ÈÑ¹æµµ 15ÃÊ Äğ´Ù¿î
+							--ìë£¨ì¹˜ê¸°ì¼ ê²½ìš° í›¼ë°©ë„ 15ì´ˆ ì¿¨ë‹¤ìš´
 							for i=1, numframes do
 								if frames[i].guid==sourceGUID and frames[i].spellId == 102060 then
 									InterruptTrackerShowForceFrame(i, 102060, 15)
@@ -389,9 +389,9 @@ function InterruptTrackerOnEvent(self, event, ...)
 								return;
 							end	
 						elseif( spellId == 102060 ) then
-							--ÈÑ¹æÀÏ°æ¿ì ÀÚ·çÄ¡±âµµ 15ÃÊ Äğ´Ù¿î
+							--í›¼ë°©ì¼ê²½ìš° ìë£¨ì¹˜ê¸°ë„ 15ì´ˆ ì¿¨ë‹¤ìš´
 							--print("6552!!")
-							--ÀÚ·çÄ¡±âÀÏ °æ¿ì ÈÑ¹æµµ 15ÃÊ Äğ´Ù¿î
+							--ìë£¨ì¹˜ê¸°ì¼ ê²½ìš° í›¼ë°©ë„ 15ì´ˆ ì¿¨ë‹¤ìš´
 							for i=1, numframes do
 								if frames[i].guid==sourceGUID and frames[i].spellId == 6552 then
 									InterruptTrackerShowForceFrame(i, 6552, 15)
@@ -407,12 +407,13 @@ function InterruptTrackerOnEvent(self, event, ...)
 								return;
 							end	
 						end
+						]]--
 						
 						return;
 					end
 				end
 				
-				--¾øÀ»°æ¿ì »õ·Î¸¸µé°í ÇÑ¹ø´õ °Ë»ö
+				--ì—†ì„ê²½ìš° ìƒˆë¡œë§Œë“¤ê³  í•œë²ˆë” ê²€ìƒ‰
 				--print("1:"..sourceGUID.."-"..spellId)
 				newFrame = InterruptTrackerAddNewOpponent( spellId, sourceGUID)
 				if( newFrame ~= nil ) then
@@ -420,9 +421,10 @@ function InterruptTrackerOnEvent(self, event, ...)
 					InterruptTrackerShowFrame(newFrame, spellId)
 					InterruptTrackerStartCounter(newFrame)
 					
+					--[[
 					if( spellId == 6552 ) then
 						--print("6552!!")
-						--ÀÚ·çÄ¡±âÀÏ °æ¿ì ÈÑ¹æµµ 15ÃÊ Äğ´Ù¿î
+						--ìë£¨ì¹˜ê¸°ì¼ ê²½ìš° í›¼ë°©ë„ 15ì´ˆ ì¿¨ë‹¤ìš´
 						for i=1, numframes do
 							if frames[i].guid==sourceGUID and frames[i].spellId == 102060 then
 								InterruptTrackerShowForceFrame(i, 102060, 15)
@@ -438,9 +440,9 @@ function InterruptTrackerOnEvent(self, event, ...)
 							return;
 						end	
 					elseif( spellId == 102060 ) then
-						--ÈÑ¹æÀÏ°æ¿ì ÀÚ·çÄ¡±âµµ 15ÃÊ Äğ´Ù¿î
+						--í›¼ë°©ì¼ê²½ìš° ìë£¨ì¹˜ê¸°ë„ 15ì´ˆ ì¿¨ë‹¤ìš´
 						--print("6552!!")
-						--ÀÚ·çÄ¡±âÀÏ °æ¿ì ÈÑ¹æµµ 15ÃÊ Äğ´Ù¿î
+						--ìë£¨ì¹˜ê¸°ì¼ ê²½ìš° í›¼ë°©ë„ 15ì´ˆ ì¿¨ë‹¤ìš´
 						for i=1, numframes do
 							if frames[i].guid==sourceGUID and frames[i].spellId == 6552 then
 								InterruptTrackerShowForceFrame(i, 6552, 15)
@@ -456,6 +458,7 @@ function InterruptTrackerOnEvent(self, event, ...)
 							return;
 						end	
 					end
+					]]--
 					return;
 				end				
 			end
