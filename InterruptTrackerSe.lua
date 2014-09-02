@@ -1,7 +1,7 @@
 ﻿local spellList = {
 	[47528] = 15,	-- DeathKnight Mind Freeze
 	[106839] = 15,  -- Skull Bash (Cat)
-	[2139] = 20,	-- Mage Counterspell
+	[2139] = 24,	-- Mage Counterspell
 	[96231] = 15,  	-- Paladin Rebuke
 	[1766] = 15,	-- Rogue Kick
 	[57994] = 12,	-- Shaman Wind Shear
