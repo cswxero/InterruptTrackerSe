@@ -472,7 +472,7 @@ function InterruptTrackerOnEvent(self, event, ...)
 			InterruptTrackerHideFrame(frames[i])
 		end
 	elseif(event == "ADDON_LOADED" and arg1 == "InterruptTrackerSe") then
-		print("Interrupt Tracker SE 1.06 By Azshara_kr - |cffDA70D6Lapresis" )
+		print("Interrupt Tracker SE 1.0(WOD) By Azshara_kr - |cffDA70D6Lapresis" )
 		InterruptTrackerSetScale()
 		InterruptTrackerSetLayout()
 		CheckArea()
