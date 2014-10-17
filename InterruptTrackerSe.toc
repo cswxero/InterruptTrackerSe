@@ -1,6 +1,7 @@
 ## Interface: 60000
 ## Title: InterruptTrackerSe
 ## Notes: InterruptTrackerSe
+## version : 1.06 beta
 ## Author: Azshara_kr Lapresis
 ## SavedVariablesPerCharacter: InterruptTrackerSeScale, InterruptTrackerSeRotate, InterruptTrackerSeMaxFrames, InterruptTrackerSeBG, InterruptTrackerSeArena, InterruptTrackerSeField
 InterruptTrackerSe.xml
